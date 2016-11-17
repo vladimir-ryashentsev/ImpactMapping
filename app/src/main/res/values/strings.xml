@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Impact mapping</string>
+    <string name="title_activity_goals">My goals</string>
+    <string name="title_activity_create_goal">Create goal</string>
+    <string name="title_input_hint">Title</string>
+    <string name="date_input_hint">Date</string>
+    <string name="create_goal">Create goal</string>
+    <string name="error">Что-то пошло не так!</string>
+    <string name="until">Завершить до: %s</string>
+</resources>
