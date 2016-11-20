@@ -84,7 +84,5 @@ public class CreatingGoal {
         };
         onView(withText(title)).check(matches(isDisplayed()));
         onView(withText(matcher)).check(matches(isDisplayed()));
-
-
     }
 }
