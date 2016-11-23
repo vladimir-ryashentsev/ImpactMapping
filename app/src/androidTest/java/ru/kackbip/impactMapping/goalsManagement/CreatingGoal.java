@@ -1,4 +1,4 @@
-package ru.kackbip.impactMapping.screens.acceptance.goalsManagement;
+package ru.kackbip.impactMapping.goalsManagement;
 
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.rule.ActivityTestRule;
