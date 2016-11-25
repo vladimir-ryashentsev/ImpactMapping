@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.UUID;
 
 import ru.kackbip.impactMapping.screens.goalCreation.interactor.IGoalCreationInteractor;
 import ru.kackbip.impactMapping.screens.goalCreation.router.IGoalCreationRouter;
@@ -11,6 +12,8 @@ import ru.kackbip.impactMapping.screens.goalCreation.view.IGoalCreationView;
 import rx.AsyncEmitter;
 import rx.Observable;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
@@ -32,6 +35,7 @@ public class GoalCreationPresenterTest {
     private AsyncEmitter<Void> destroyEmitter;
     private AsyncEmitter<Void> createEmitter;
 
+    private static final UUID ID = UUID.randomUUID();
     private static final String TITLE = "Заголовок!";
     private static final Date DATE = new Date(40000);
 
@@ -45,7 +49,7 @@ public class GoalCreationPresenterTest {
         when(view.waitForDateChanged()).thenReturn(Observable.fromEmitter(emitter -> dateEmitter = emitter, AsyncEmitter.BackpressureMode.ERROR));
         when(view.waitForDestroy()).thenReturn(Observable.fromEmitter(emitter -> destroyEmitter = emitter, AsyncEmitter.BackpressureMode.ERROR));
         when(view.waitForCreateClick()).thenReturn(Observable.fromEmitter(emitter -> createEmitter = emitter, AsyncEmitter.BackpressureMode.ERROR));
-        when(interactor.addGoal(TITLE, DATE)).thenReturn(Observable.just(null));
+        when(interactor.addGoal(any(UUID.class), eq(TITLE), eq(DATE))).thenReturn(Observable.just(null));
     }
 
     @Test
@@ -63,7 +67,7 @@ public class GoalCreationPresenterTest {
         titleEmitter.onNext(TITLE);
         dateEmitter.onNext(DATE);
         createEmitter.onNext(null);
-        verify(interactor).addGoal(TITLE, DATE);
+        verify(interactor).addGoal(any(UUID.class), eq(TITLE), eq(DATE));
         verify(router, timeout(50)).close();
     }
 

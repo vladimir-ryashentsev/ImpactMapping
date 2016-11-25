@@ -1,9 +1,10 @@
 package ru.kackbip.impactMapping.screens.goalCreation.interactor;
 
 import java.util.Date;
+import java.util.UUID;
 
 import ru.kackbip.impactMapping.api.IApi;
-import ru.kackbip.impactMapping.api.commands.CreateGoalCommand;
+import ru.kackbip.impactMapping.api.commands.AddGoalCommand;
 import rx.Observable;
 
 /**
@@ -19,7 +20,7 @@ public class GoalCreationInteractor implements IGoalCreationInteractor {
     }
 
     @Override
-    public Observable<Void> addGoal(String title, Date date) {
-        return api.execute(new CreateGoalCommand(title, date));
+    public Observable<Void> addGoal(UUID id, String title, Date date) {
+        return api.execute(new AddGoalCommand(id, title, date));
     }
 }

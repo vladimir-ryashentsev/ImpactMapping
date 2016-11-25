@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.UUID;
 
 import ru.kackbip.impactMapping.api.IApi;
 import ru.kackbip.impactMapping.api.projections.Goals;
@@ -25,31 +26,31 @@ import static org.mockito.Mockito.when;
 @RunWith(AndroidJUnit4.class)
 public class GoalsInteractorTest {
 
-    private static final Goals.Goal GOAL1 = new Goals.Goal("Цель1", new Date(1000));
-    private static final Goals.Goal GOAL2 = new Goals.Goal("Цель2", new Date(2000));
+    private static final Goals.Goal GOAL1 = new Goals.Goal(UUID.randomUUID(), "Цель1", new Date(1000));
+    private static final Goals.Goal GOAL2 = new Goals.Goal(UUID.randomUUID(), "Цель2", new Date(2000));
     private static final Goals GOALS = new Goals(Arrays.asList(GOAL1, GOAL2));
 
     private GoalsInteractor interactor;
     private IApi api;
 
     @Before
-    public void init(){
+    public void init() {
         api = mock(IApi.class);
         when(api.observe(Goals.class)).thenReturn(Observable.create(subscriber -> subscriber.onNext(GOALS)));
         interactor = new GoalsInteractor(api);
     }
 
     @Test
-    public void observeGoals(){
-        TestSubscriber<Goals> testSubscriber = new TestSubscriber<>();
-        interactor.waitForGoals().subscribe(testSubscriber);
+    public void observeGoals() {
+        TestSubscriber<Goals> subscriber = new TestSubscriber<>();
+        interactor.waitForGoals().subscribe(subscriber);
 
-        testSubscriber.assertNoErrors();
-        testSubscriber.assertNotCompleted();
-        assertTrue(testSubscriber.getOnNextEvents().size()==1);
+        subscriber.assertNoErrors();
+        subscriber.assertNotCompleted();
+        assertTrue(subscriber.getOnNextEvents().size() == 1);
 
-        Goals goals = testSubscriber.getOnNextEvents().get(0);
-        assertTrue(goals.getGoals().size()==2);
+        Goals goals = subscriber.getOnNextEvents().get(0);
+        assertTrue(goals.getGoals().size() == 2);
 
         Goals.Goal goal1 = goals.getGoals().get(0);
         assertEquals(GOAL1.getTitle(), goal1.getTitle());

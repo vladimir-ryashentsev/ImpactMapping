@@ -5,9 +5,10 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.util.Date;
+import java.util.UUID;
 
 import ru.kackbip.impactMapping.api.IApi;
-import ru.kackbip.impactMapping.api.commands.CreateGoalCommand;
+import ru.kackbip.impactMapping.api.commands.AddGoalCommand;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
@@ -28,24 +29,30 @@ public class GoalCreationInteractorTest {
     @Before
     public void init(){
         api = mock(IApi.class);
-        when(api.execute(any(CreateGoalCommand.class))).thenReturn(Observable.just(null));
+        when(api.execute(any(AddGoalCommand.class))).thenReturn(Observable.just(null));
 
         interactor = new GoalCreationInteractor(api);
     }
 
     @Test
     public void addGoal() throws Exception {
+        String title = "Заголовок";
+        Date date = new Date(3000);
+        UUID id = UUID.randomUUID();
+
         TestSubscriber<Void> subscriber = new TestSubscriber<>();
-        interactor.addGoal("Заголовок", new Date(3000)).subscribe(subscriber);
+
+        interactor.addGoal(id, title, date).subscribe(subscriber);
         subscriber.assertNoErrors();
         subscriber.assertValue(null);
         subscriber.assertCompleted();
 
-        ArgumentCaptor<CreateGoalCommand> captor = ArgumentCaptor.forClass(CreateGoalCommand.class);
+        ArgumentCaptor<AddGoalCommand> captor = ArgumentCaptor.forClass(AddGoalCommand.class);
         verify(api).execute(captor.capture());
 
-        CreateGoalCommand command = captor.getValue();
-        assertEquals("Заголовок", command.getTitle());
-        assertEquals(new Date(3000), command.getDate());
+        AddGoalCommand command = captor.getValue();
+        assertEquals(id, command.getId());
+        assertEquals(title, command.getTitle());
+        assertEquals(date, command.getDate());
     }
 }

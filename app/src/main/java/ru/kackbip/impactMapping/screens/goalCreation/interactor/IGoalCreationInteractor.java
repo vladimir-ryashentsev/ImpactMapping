@@ -1,6 +1,7 @@
 package ru.kackbip.impactMapping.screens.goalCreation.interactor;
 
 import java.util.Date;
+import java.util.UUID;
 
 import rx.Observable;
 
@@ -9,5 +10,5 @@ import rx.Observable;
  */
 
 public interface IGoalCreationInteractor {
-    Observable<Void> addGoal(String title, Date date);
+    Observable<Void> addGoal(UUID id, String title, Date date);
 }

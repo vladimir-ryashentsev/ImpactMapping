@@ -4,18 +4,14 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import ru.kackbip.impactMapping.api.Api;
 import ru.kackbip.impactMapping.api.IApi;
-import ru.kackbip.impactMapping.api.commands.CreateGoalCommand;
-import ru.kackbip.impactMapping.api.commands.executors.CreateGoalCommandExecutor;
-import ru.kackbip.impactMapping.api.commands.executors.ICommandExecutor;
+import ru.kackbip.impactMapping.api.commands.executors.CommandExecutorsProvider;
+import ru.kackbip.impactMapping.api.commands.executors.local.LocalCommandExecutorsProvider;
 import ru.kackbip.impactMapping.api.projections.repository.IProjectionRepository;
 import ru.kackbip.impactMapping.api.projections.repository.ProjectionRepository;
 import ru.kackbip.infrastructure.storage.pojo.GsonPojoStorage;
@@ -34,16 +30,14 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    public IApi provideApi(IProjectionRepository projectionRepository, Map<Class, ICommandExecutor> commandExecutors){
-        return new Api(projectionRepository, commandExecutors);
+    public IApi provideApi(IProjectionRepository projectionRepository, CommandExecutorsProvider commandExecutorsProvider){
+        return new Api(projectionRepository, commandExecutorsProvider);
     }
 
     @Provides
     @Singleton
-    public Map<Class, ICommandExecutor> provideCommandExecutors(IProjectionRepository projectionRepository){
-        Map<Class, ICommandExecutor> executors = new HashMap<>();
-        executors.put(CreateGoalCommand.class, new CreateGoalCommandExecutor(projectionRepository));
-        return executors;
+    public CommandExecutorsProvider provideCommandExecutorsProvider(IProjectionRepository projectionRepository){
+        return new LocalCommandExecutorsProvider(projectionRepository);
     }
 
     @Provides

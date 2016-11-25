@@ -1,6 +1,7 @@
 package ru.kackbip.impactMapping.screens.goalCreation.presenter;
 
 import java.util.Date;
+import java.util.UUID;
 
 import ru.kackbip.impactMapping.screens.base.presenter.BasePresenter;
 import ru.kackbip.impactMapping.screens.goalCreation.interactor.IGoalCreationInteractor;
@@ -52,7 +53,7 @@ public class GoalCreationPresenter extends BasePresenter<IGoalCreationView> {
     }
 
     private void createGoal() {
-        interactor.addGoal(title, date)
+        interactor.addGoal(UUID.randomUUID(), title, date)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
